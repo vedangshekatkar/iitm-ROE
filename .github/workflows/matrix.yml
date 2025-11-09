@@ -1,0 +1,35 @@
+name: CI Matrix Build with Artifacts
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [14, 16, 18]   # three variants satisfy the requirement
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # required identifier step
+      - id: matrix-5a658dc
+        name: matrix-5a658dc
+        run: echo "Building variant ${{ matrix.version }}"
+
+      - name: Generate build artifact content
+        run: |
+          echo "Build output for version ${{ matrix.version }}" > output.txt
+          echo "Datetime: $(date)" >> output.txt
+          echo "Runner: $RUNNER_OS" >> output.txt
+          wc -c output.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-5a658dc-v${{ matrix.version }}
+          path: output.txt
+          if-no-files-found: error
