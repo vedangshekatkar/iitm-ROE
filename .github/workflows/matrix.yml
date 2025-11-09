@@ -10,26 +10,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [14, 16, 18]   # three variants satisfy the requirement
+        version: [14, 16, 18]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # required identifier step
-      - id: matrix-5a658dc
-        name: matrix-5a658dc
+      # required exact identifier
+      - id: matrix-5a650dc
+        name: matrix-5a650dc
         run: echo "Building variant ${{ matrix.version }}"
 
-      - name: Generate build artifact content
+      - name: Generate build artifact
         run: |
           echo "Build output for version ${{ matrix.version }}" > output.txt
           echo "Datetime: $(date)" >> output.txt
           echo "Runner: $RUNNER_OS" >> output.txt
-          wc -c output.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-5a658dc-v${{ matrix.version }}
+          name: build-5a650dc-v${{ matrix.version }}
           path: output.txt
           if-no-files-found: error
